@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Roast &amp; Relic — The Artisanal Editorial</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;0,900;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Playball&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "on-tertiary-container": "#6dcea6",
+          "surface-container-highest": "#ede0d6",
+          "on-primary-fixed": "#311300",
+          "surface": "#fff8f4",
+          "surface-container": "#f9ece2",
+          "inverse-primary": "#f4ba96",
+          "primary": "#502c12",
+          "tertiary-fixed": "#94f6cb",
+          "on-surface": "#211a15",
+          "surface-variant": "#ede0d6",
+          "background": "#fff8f4",
+          "surface-container-lowest": "#ffffff",
+          "surface-container-high": "#f3e6dc",
+          "on-error-container": "#93000a",
+          "outline": "#83746c",
+          "secondary-fixed-dim": "#f2bd7a",
+          "tertiary-fixed-dim": "#78d9b0",
+          "error-container": "#ffdad6",
+          "on-primary-fixed-variant": "#653d22",
+          "surface-bright": "#fff8f4",
+          "on-secondary-fixed-variant": "#633f05",
+          "tertiary": "#003e2b",
+          "on-secondary": "#ffffff",
+          "secondary-container": "#ffc884",
+          "inverse-on-surface": "#fceee4",
+          "primary-fixed": "#ffdbc7",
+          "on-secondary-fixed": "#2a1800",
+          "on-primary": "#ffffff",
+          "on-background": "#211a15",
+          "on-error": "#ffffff",
+          "secondary": "#7e561d",
+          "outline-variant": "#d5c3b9",
+          "inverse-surface": "#362f29",
+          "on-tertiary": "#ffffff",
+          "primary-fixed-dim": "#f4ba96",
+          "primary-container": "#6b4226",
+          "on-secondary-container": "#795219",
+          "on-tertiary-fixed-variant": "#005139",
+          "error": "#ba1a1a",
+          "secondary-fixed": "#ffddb6",
+          "surface-tint": "#805437",
+          "on-tertiary-fixed": "#002115",
+          "on-primary-container": "#e9b08c",
+          "on-surface-variant": "#51443d",
+          "tertiary-container": "#00573e",
+          "surface-dim": "#e4d8ce",
+          "surface-container-low": "#fff1e7"
+        },
+        fontFamily: {
+          "headline": ["Noto Serif", "serif"],
+          "body": ["Plus Jakarta Sans", "sans-serif"],
+          "label": ["Plus Jakarta Sans", "sans-serif"],
+          "cursive": ["Playball", "cursive"]
+        },
+        borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+      },
+    },
+  }
+</script>
+<style>
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    display: inline-block; line-height: 1;
+  }
+  .hero-gradient { background: linear-gradient(135deg, rgba(80,44,18,0.72) 0%, rgba(33,26,21,0.38) 100%); }
+  .cta-gloss { background: linear-gradient(135deg, #502c12 0%, #6b4226 100%); }
+  .glass-nav { background-color: rgba(255,248,244,0.82); backdrop-filter: blur(24px); }
+  .page { display: none; }
+  .page.active { display: block; }
+  nav a.nav-active { border-bottom: 2px solid #502c12; color: #502c12 !important; }
+  /* Smooth transitions */
+  .page { animation: fadeIn 0.25s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+  /* Mobile menu */
+  #mobile-menu { display: none; }
+  #mobile-menu.open { display: flex; }
+  /* Toast */
+  #toast { transition: opacity 0.3s; }
+</style>
+</head>
+<body class="bg-surface text-on-surface font-body selection:bg-secondary-container selection:text-on-secondary-container">
+
+<!-- ══════════════════════════ TOP NAV ══════════════════════════ -->
+<nav class="fixed top-0 w-full z-50 glass-nav shadow-[0px_4px_24px_rgba(81,68,61,0.07)]">
+  <div class="flex justify-between items-center px-6 md:px-8 py-4 max-w-7xl mx-auto">
+    <button onclick="showPage('home')" class="text-xl md:text-2xl font-headline font-black text-primary tracking-tighter hover:opacity-80 transition-opacity">
+      Roast &amp; Relic
+    </button>
+    <!-- Desktop nav -->
+    <div class="hidden md:flex gap-8 items-center">
+      <button onclick="showPage('home')" data-nav="home" class="nav-link font-headline font-bold text-lg tracking-tight text-on-surface-variant hover:text-primary transition-all duration-300 pb-1">Home</button>
+      <button onclick="showPage('menu')" data-nav="menu" class="nav-link font-headline font-bold text-lg tracking-tight text-on-surface-variant hover:text-primary transition-all duration-300 pb-1">Menu</button>
+      <button onclick="showPage('about')" data-nav="about" class="nav-link font-headline font-bold text-lg tracking-tight text-on-surface-variant hover:text-primary transition-all duration-300 pb-1">About</button>
+      <button onclick="showPage('contact')" data-nav="contact" class="nav-link font-headline font-bold text-lg tracking-tight text-on-surface-variant hover:text-primary transition-all duration-300 pb-1">Contact</button>
+    </div>
+    <div class="flex items-center gap-3">
+      <button onclick="showPage('menu')" class="cta-gloss text-on-primary px-5 py-2 rounded-lg font-bold text-sm active:scale-95 transition-transform shadow-md">
+        Order Now
+      </button>
+      <!-- Mobile hamburger -->
+      <button id="hamburger" onclick="toggleMobile()" class="md:hidden p-2 text-primary rounded-lg hover:bg-primary/5 transition">
+        <span class="material-symbols-outlined">menu</span>
+      </button>
+    </div>
+  </div>
+  <!-- Mobile dropdown -->
+  <div id="mobile-menu" class="flex-col px-6 pb-4 gap-3 md:hidden border-t border-outline-variant/30">
+    <button onclick="showPage('home');toggleMobile()" class="text-left w-full py-2 font-headline font-bold text-primary">Home</button>
+    <button onclick="showPage('menu');toggleMobile()" class="text-left w-full py-2 font-headline font-bold text-on-surface-variant">Menu</button>
+    <button onclick="showPage('about');toggleMobile()" class="text-left w-full py-2 font-headline font-bold text-on-surface-variant">About</button>
+    <button onclick="showPage('contact');toggleMobile()" class="text-left w-full py-2 font-headline font-bold text-on-surface-variant">Contact</button>
+  </div>
+</nav>
+
+<!-- ══════════════════════════ HOME PAGE ══════════════════════════ -->
+<div id="page-home" class="page active">
+  <!-- Hero -->
+  <header class="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
+    <div class="absolute inset-0 z-0">
+      <img alt="Warm coffee shop interior" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAXvHw5CfmgVCYUGiPIT-asu6itleyxlQr69-Dw93cMDMMhjZNxgRUr6abgooiTZBh644Sw9NAPaqchJQotUEIDk6OdRzGQJoD_nkmtCy1Hz2RivIzM5VcTVsOyo3xQl8OCl0gVEvkh-27mQv_hHGQBkbsyngPMpyizNoa-gxAdsOY1PwDCYZ9XE0IQPrb-NXzWqQKS0H-p_fXcFAriD_hySyGu2d2f7TspkJ5w95t2nHWevHyjtKph2WfBQIXz-D59hXIHAHkbDTRa"/>
+      <div class="absolute inset-0 hero-gradient"></div>
+    </div>
+    <div class="relative z-10 text-center px-6 max-w-4xl">
+      <span class="font-cursive text-secondary-fixed text-4xl md:text-5xl block mb-2 drop-shadow-md">We serve coffee.</span>
+      <h1 class="font-headline font-black text-6xl md:text-9xl text-surface tracking-tighter mb-8 leading-tight">
+        Roast &amp; Relic
+      </h1>
+      <div class="flex flex-col md:flex-row gap-6 justify-center items-center">
+        <button onclick="showPage('menu')" class="cta-gloss text-on-primary px-10 py-4 rounded-xl font-bold text-lg shadow-xl hover:opacity-90 transition-opacity">
+          Order Now
+        </button>
+        <button onclick="showPage('menu')" class="bg-surface/10 backdrop-blur-md text-surface border border-surface/20 px-10 py-4 rounded-xl font-bold text-lg hover:bg-surface/20 transition-all">
+          View Menu
+        </button>
+      </div>
+    </div>
+    <div class="absolute bottom-12 left-1/2 -translate-x-1/2 animate-bounce">
+      <span class="material-symbols-outlined text-surface text-4xl">expand_more</span>
+    </div>
+  </header>
+
+  <!-- Features Bento Grid -->
+  <section class="py-24 px-8 max-w-7xl mx-auto">
+    <div class="mb-16">
+      <h2 class="font-headline text-4xl md:text-5xl font-bold text-primary mb-4">Crafted with Intention</h2>
+      <div class="h-1 w-24 bg-tertiary-fixed rounded-full"></div>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+      <div class="md:col-span-7 bg-surface-container rounded-xl p-12 flex flex-col justify-end min-h-[400px] relative overflow-hidden group">
+        <div class="absolute top-0 right-0 p-8">
+          <span class="material-symbols-outlined text-primary text-6xl opacity-20">local_fire_department</span>
+        </div>
+        <div class="relative z-10">
+          <h3 class="font-headline text-3xl font-bold text-primary mb-4">Hand-Roasted</h3>
+          <p class="text-on-surface-variant text-lg max-w-md">Small batches, roasted daily in our vintage Probat to bring out the unique soul of every single bean.</p>
+        </div>
+      </div>
+      <div class="md:col-span-5 bg-tertiary-container text-on-tertiary-container rounded-xl p-12 flex flex-col items-center justify-center text-center">
+        <span class="material-symbols-outlined text-7xl mb-6 text-tertiary-fixed">coffee_maker</span>
+        <h3 class="font-headline text-3xl font-bold mb-4 text-surface">Artisan Brews</h3>
+        <p class="text-on-tertiary-container/80 text-lg">Precision pouring and scientific extraction methods for a cup that's consistently extraordinary.</p>
+      </div>
+      <div class="md:col-span-5 bg-secondary-container rounded-xl p-12 flex flex-col justify-center overflow-hidden relative">
+        <img alt="Cozy coffee nook" class="absolute inset-0 w-full h-full object-cover opacity-20" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB7qdOr1GI8hI_FzqiLYItsO5Mlw-F23UP9aTpKTtmK71fftIM09GhZfvcOvj8gp6pGx7u7xqfUu1DJrjse547GUxgFHnWB0u45e7ctrP-TRLOYAa30tVeCh35p8IRmdLUHuuaGcYeDYuIMopNX6NA6hEdTHkLI2A0-Ietok7l9l2lg-g5d1E71kunTz5a8txShtr5zhO78AKbzAJqBd0Y2upFCfoJLiIKZwXoO2FEBCC5_GZRSPToqC8Usrsx8ZLeCKrnEGSWTrjzd"/>
+        <div class="relative z-10">
+          <h3 class="font-headline text-3xl font-bold text-on-secondary-container mb-4">Cozy Space</h3>
+          <p class="text-on-secondary-container text-lg">Designed as a digital detox sanctuary. Warm light, soft jazz, and the scent of fresh parchment.</p>
+        </div>
+      </div>
+      <div class="md:col-span-7 bg-surface-container-highest rounded-xl p-12 flex items-center gap-8">
+        <div class="hidden lg:block w-1/3 h-48 rounded-lg overflow-hidden shrink-0 shadow-lg -rotate-3">
+          <img alt="Coffee beans" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCSsPosIHoztMTupPLnlXLNo9XQh9_h-mu8liFrC9si1m7zrLce233HW1yeVRbBzBUli00SJ3ZHsjV70eFPNt9nyMRL0uinbVlejbPOYhFPspCabKGd1Db0-FjeUWV0RdqmwYC6zQwJgsASi0tHGI_fTcqEXWVa7EFtD-LXZtn_BoZUu9oix5xa33aSb88f9kTjcdX3jnTOH68gVmYxTcaZ5OF-iDRsoLbCjomAhLW7fLphQMM6YyOrGBCDtt3wIxowZk3QLyXRear0"/>
+        </div>
+        <div>
+          <h3 class="font-headline text-3xl font-bold text-primary mb-4">Ethically Sourced</h3>
+          <p class="text-on-surface-variant text-lg">Direct trade partnerships that ensure farmers receive more than just a fair wage. We know every name behind the bean.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Editorial Feature Section -->
+  <section class="bg-surface-container-low py-32 px-8">
+    <div class="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-20">
+      <div class="lg:w-1/2 relative">
+        <div class="bg-surface-container-highest w-full h-[500px] rounded-xl overflow-hidden shadow-2xl relative z-10">
+          <img alt="Coffee detail" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBYCtacPIqDp32g_qh6OebZeZrDuXZWjssOTSgp1NgArA3WSkfT_uqhAMBQnTweGn-E1mRamR8EySkVa_cl4QI8JiZo0PHiPjO0kCbXtx24SX_3VPKn3lDd95Q3b5cTgg663Gz9slSwXNyLRZjH0_pK_CGWpcInjWVvLnGsosWWMUCd49aYYW1kMw3dnOCSxCs2JYuFGtxephPtKdeTLZpdBdB7JoUTU_znaRYCP1GDH2HNN37rmnz6s3E9JY9M4pkygRp9tDXQmBMp"/>
+        </div>
+        <div class="absolute -bottom-10 -right-10 w-64 h-64 bg-secondary-fixed rounded-xl p-8 shadow-xl hidden md:flex flex-col justify-center z-20 rotate-6 border-4 border-surface">
+          <p class="font-cursive text-2xl text-secondary mb-2 italic">Brewer's Note</p>
+          <p class="text-on-surface font-medium italic">"The perfect crema is the signature of a soul well-rested."</p>
+        </div>
+      </div>
+      <div class="lg:w-1/2">
+        <span class="text-secondary font-bold tracking-widest text-sm uppercase mb-4 block">Our Philosophy</span>
+        <h2 class="font-headline text-5xl md:text-6xl font-black text-primary mb-8 leading-tight">The Art of the Slow Pour</h2>
+        <p class="text-on-surface-variant text-xl leading-relaxed mb-8 font-body">
+          In a world obsessed with speed, we celebrate the ritual. Each cup at <span class="font-bold text-primary">Roast &amp; Relic</span> is a testament to the belief that the best things in life take time to develop. From our slow-extraction cold brews to our hand-whipped lattes, we invite you to pause.
+        </p>
+        <div class="grid grid-cols-2 gap-8 mb-12">
+          <div>
+            <p class="text-4xl font-headline font-black text-primary">12</p>
+            <p class="text-on-surface-variant uppercase text-xs tracking-widest font-bold">Origin Varieties</p>
+          </div>
+          <div>
+            <p class="text-4xl font-headline font-black text-primary">48h</p>
+            <p class="text-on-surface-variant uppercase text-xs tracking-widest font-bold">Cold Extraction</p>
+          </div>
+        </div>
+        <button onclick="showPage('about')" class="inline-flex items-center gap-2 text-primary font-bold border-b-2 border-primary pb-1 hover:gap-4 transition-all">
+          Read Our Story 
+          <span class="material-symbols-outlined">arrow_forward</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-surface-container w-full py-12 px-8">
+    <div class="flex flex-col md:flex-row justify-between items-center gap-8 max-w-7xl mx-auto">
+      <div>
+        <span class="font-headline italic text-xl text-primary block mb-1">The Artisanal Editorial</span>
+        <p class="text-on-surface-variant text-sm">© 2024 Roast &amp; Relic. Hand-stamped and freshly roasted.</p>
+      </div>
+      <div class="flex flex-wrap justify-center gap-8 text-sm font-medium">
+        <a href="#" class="text-on-surface-variant hover:text-secondary transition-colors">Instagram</a>
+        <a href="#" class="text-on-surface-variant hover:text-secondary transition-colors">Facebook</a>
+        <a href="#" class="text-on-surface-variant hover:text-secondary transition-colors">Twitter</a>
+        <a href="#" class="text-on-surface-variant hover:text-secondary transition-colors">Privacy Policy</a>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<!-- ══════════════════════════ MENU PAGE ══════════════════════════ -->
+<div id="page-menu" class="page">
+  <main class="pt-32 pb-24 px-6 max-w-7xl mx-auto">
+    <header class="mb-16 text-center max-w-2xl mx-auto">
+      <span class="text-secondary font-bold tracking-widest uppercase text-xs mb-3 block">Curated Selection</span>
+      <h1 class="font-headline text-5xl md:text-6xl text-primary mb-6 leading-tight">Our Daily Anthology</h1>
+      <p class="text-on-surface-variant text-lg leading-relaxed">A tactile journey through small-batch roasts and artisanal pastries, handcrafted for the discerning palate.</p>
+    </header>
+
+    <!-- Menu Grid -->
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-12">
+      <!-- Espresso -->
+      <div class="group relative bg-surface-container-low rounded-lg overflow-hidden transition-all duration-300 hover:bg-surface-container shadow-sm hover:shadow-xl">
+        <div class="aspect-[4/5] overflow-hidden">
+          <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC_ljhU0_P-bvG_lRLpDrPmN2ady_FFb2c_eXxN9Jx8BGgSR8oSalBymyBx4bykDfA5hyb5Bb5uoQwiRIC8ubYgH_5SZHM8Kx6lCzW6yy6LY6Tj4JlGL5KdXPap8DD9hes3vFNOH_WSwVcaV41QlMplYVLx62wxfuTVx8vSt_AKEfcpiuwtMFqs6tpNY7HJ1HIkxosEUVZpBBpBRqMN9kvu9KX6JdKOdwV-5bU0U7UTlTK-QG8duXk9ifyiIFGN-9cfzUTUw-qt3wU9" alt="Espresso"/>
+        </div>
+        <div class="p-8">
+          <div class="flex justify-between items-baseline mb-4">
+            <h3 class="font-headline text-2xl text-primary">Espresso</h3>
+            <span class="text-secondary font-bold text-xl">$2.50</span>
+          </div>
+          <p class="text-on-surface-variant mb-6">Bold double-shot of our signature bean roast, featuring notes of dark chocolate and smoke.</p>
+          <div class="flex gap-2 flex-wrap">
+            <span class="bg-tertiary-container text-on-tertiary-container px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">Rich Body</span>
+            <span class="bg-tertiary-container text-on-tertiary-container px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">Ethiopian</span>
+          </div>
+          <button onclick="addToCart('Espresso','$2.50')" class="mt-6 w-full cta-gloss text-on-primary py-3 rounded-lg font-bold text-sm active:scale-95 transition-transform">
+            Add to Order
+          </button>
+        </div>
+      </div>
+
+      <!-- Cappuccino -->
+      <div class="group relative bg-surface-container-low rounded-lg overflow-hidden transition-all duration-300 hover:bg-surface-container shadow-sm hover:shadow-xl md:-translate-y-8">
+        <div class="aspect-[4/5] overflow-hidden">
+          <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDnnV4kTq50fTjs-MslcOpMxL63HZ-sNkMadvWO85mX1lCpRukT_b32Owj8TgdHr9QbIpY5bYRyWyWkXwSfuClil_Zq-pInOJaTu8SQ9jlEAaq3tqWv0vN3mtbulYj8Mceco4yLwGzGVIFJyhECaU8vyTCy7XIj2rBxu224l15WzbU6rfWk2eNIO50VIfyQHstEC28d54cs39p_wOMHbIAUo0EZfIJW_evg1xz6PAlph-Xy-O1xBBL_cX_9sTi4eup7PPhoRdxAo3Bn" alt="Cappuccino"/>
+        </div>
+        <div class="p-8">
+          <div class="flex justify-between items-baseline mb-4">
+            <h3 class="font-headline text-2xl text-primary">Cappuccino</h3>
+            <span class="text-secondary font-bold text-xl">$3.50</span>
+          </div>
+          <p class="text-on-surface-variant mb-6">Perfect balance of intense espresso, silky steamed milk, and a cloud of velvety foam.</p>
+          <div class="flex gap-2 flex-wrap">
+            <span class="bg-tertiary-container text-on-tertiary-container px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">Velvety</span>
+            <span class="bg-tertiary-container text-on-tertiary-container px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">Smooth</span>
+          </div>
+          <button onclick="addToCart('Cappuccino','$3.50')" class="mt-6 w-full cta-gloss text-on-primary py-3 rounded-lg font-bold text-sm active:scale-95 transition-transform">
+            Add to Order
+          </button>
+        </div>
+      </div>
+
+      <!-- Almond Croissant -->
+      <div class="group relative bg-surface-container-low rounded-lg overflow-hidden transition-all duration-300 hover:bg-surface-container shadow-sm hover:shadow-xl">
+        <div class="aspect-[4/5] overflow-hidden">
+          <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD4LvwDR0dOagPWQqJOadV2HxGAxJExB98nbNyGaB8PKtYeDCebgdX1L4N-Ne4UhPxDUkTWnnakgwBSp9XmikyQRZU7xFVmoHWOyBml46SFfcS5Hsf3gUE-XKsYyDhI-sQ6xcNBQCvk-ce5bNgY6A9siGH664lgkrnjHVzn3u14IBLqhGY1OCmyxo4zn49dIfhZWje92L2KKiFHbwieau7tVp6E8m-CmHouXKxILIsRQ1Il_pOJg2SsvRBM2qCETVemKijWgB_Z7ACF" alt="Almond Croissant"/>
+        </div>
+        <div class="p-8">
+          <div class="flex justify-between items-baseline mb-4">
+            <h3 class="font-headline text-2xl text-primary">Almond Croissant</h3>
+            <span class="text-secondary font-bold text-xl">$2.95</span>
+          </div>
+          <p class="text-on-surface-variant mb-6">Flaky almond pastry filled with house-made frangipane and topped with toasted slivers.</p>
+          <div class="flex gap-2 flex-wrap">
+            <span class="bg-tertiary-container text-on-tertiary-container px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">Hand-Crafted</span>
+            <span class="bg-tertiary-container text-on-tertiary-container px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">Fresh Daily</span>
+          </div>
+          <button onclick="addToCart('Almond Croissant','$2.95')" class="mt-6 w-full cta-gloss text-on-primary py-3 rounded-lg font-bold text-sm active:scale-95 transition-transform">
+            Add to Order
+          </button>
+        </div>
+      </div>
+
+      <!-- Cold Brew -->
+      <div class="group relative bg-surface-container-low rounded-lg overflow-hidden transition-all duration-300 hover:bg-surface-container shadow-sm hover:shadow-xl">
+        <div class="aspect-[4/5] overflow-hidden bg-tertiary-container flex items-center justify-center">
+          <span class="material-symbols-outlined text-[120px] text-tertiary-fixed opacity-60">local_cafe</span>
+        </div>
+        <div class="p-8">
+          <div class="flex justify-between items-baseline mb-4">
+            <h3 class="font-headline text-2xl text-primary">Cold Brew</h3>
+            <span class="text-secondary font-bold text-xl">$4.50</span>
+          </div>
+          <p class="text-on-surface-variant mb-6">48-hour slow-extraction cold brew. Smooth, bold, and naturally sweet — no bitterness.</p>
+          <div class="flex gap-2 flex-wrap">
+            <span class="bg-tertiary-container text-on-tertiary-container px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">48h Brew</span>
+            <span class="bg-tertiary-container text-on-tertiary-container px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">Colombian</span>
+          </div>
+          <button onclick="addToCart('Cold Brew','$4.50')" class="mt-6 w-full cta-gloss text-on-primary py-3 rounded-lg font-bold text-sm active:scale-95 transition-transform">
+            Add to Order
+          </button>
+        </div>
+      </div>
+
+      <!-- Flat White -->
+      <div class="group relative bg-surface-container-low rounded-lg overflow-hidden transition-all duration-300 hover:bg-surface-container shadow-sm hover:shadow-xl md:translate-y-4">
+        <div class="aspect-[4/5] overflow-hidden bg-surface-container-high flex items-center justify-center">
+          <span class="material-symbols-outlined text-[120px] text-primary opacity-20">coffee</span>
+        </div>
+        <div class="p-8">
+          <div class="flex justify-between items-baseline mb-4">
+            <h3 class="font-headline text-2xl text-primary">Flat White</h3>
+            <span class="text-secondary font-bold text-xl">$3.75</span>
+          </div>
+          <p class="text-on-surface-variant mb-6">Microfoam velvet over a ristretto base. Stronger than a latte, silkier than a cappuccino.</p>
+          <div class="flex gap-2 flex-wrap">
+            <span class="bg-secondary-fixed text-on-secondary-fixed px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">Ristretto</span>
+            <span class="bg-secondary-fixed text-on-secondary-fixed px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">Intense</span>
+          </div>
+          <button onclick="addToCart('Flat White','$3.75')" class="mt-6 w-full cta-gloss text-on-primary py-3 rounded-lg font-bold text-sm active:scale-95 transition-transform">
+            Add to Order
+          </button>
+        </div>
+      </div>
+
+      <!-- Matcha Latte -->
+      <div class="group relative bg-surface-container-low rounded-lg overflow-hidden transition-all duration-300 hover:bg-surface-container shadow-sm hover:shadow-xl">
+        <div class="aspect-[4/5] overflow-hidden bg-tertiary-container/30 flex items-center justify-center">
+          <span class="material-symbols-outlined text-[120px] text-tertiary opacity-30">eco</span>
+        </div>
+        <div class="p-8">
+          <div class="flex justify-between items-baseline mb-4">
+            <h3 class="font-headline text-2xl text-primary">Matcha Latte</h3>
+            <span class="text-secondary font-bold text-xl">$4.25</span>
+          </div>
+          <p class="text-on-surface-variant mb-6">Ceremonial-grade matcha whisked with oat milk. Earthy, creamy, and calming.</p>
+          <div class="flex gap-2 flex-wrap">
+            <span class="bg-tertiary-container text-on-tertiary-container px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">Ceremonial</span>
+            <span class="bg-tertiary-container text-on-tertiary-container px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">Vegan</span>
+          </div>
+          <button onclick="addToCart('Matcha Latte','$4.25')" class="mt-6 w-full cta-gloss text-on-primary py-3 rounded-lg font-bold text-sm active:scale-95 transition-transform">
+            Add to Order
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Newsletter CTA -->
+    <section class="mt-32 p-12 bg-surface-container-high rounded-xl relative overflow-hidden">
+      <div class="relative z-10 max-w-xl">
+        <h2 class="font-headline text-4xl text-primary mb-4">The Morning Journal</h2>
+        <p class="text-on-surface-variant mb-8 font-body">Join our registry to receive notes on new roasts, seasonal pastries, and exclusive tasting events.</p>
+        <div class="flex flex-col sm:flex-row gap-4">
+          <input id="newsletter-email" class="bg-surface border-none rounded-lg px-6 py-3 focus:ring-2 focus:ring-secondary text-on-surface w-full" placeholder="Your email address" type="email"/>
+          <button onclick="subscribeNewsletter()" class="bg-secondary text-on-secondary px-8 py-3 rounded-lg font-bold whitespace-nowrap hover:bg-primary transition-colors">Subscribe</button>
+        </div>
+      </div>
+      <div class="absolute right-0 top-0 h-full w-1/3 opacity-10 pointer-events-none hidden md:flex items-center justify-center">
+        <span class="material-symbols-outlined text-[200px] text-primary select-none">coffee_maker</span>
+      </div>
+    </section>
+  </main>
+
+  <!-- Cart Drawer (floating) -->
+  <div id="cart-panel" class="hidden fixed bottom-6 right-6 z-50 bg-surface rounded-2xl shadow-2xl p-6 w-80 border border-outline-variant/20">
+    <div class="flex justify-between items-center mb-4">
+      <h3 class="font-headline font-bold text-primary text-lg">Your Order</h3>
+      <button onclick="document.getElementById('cart-panel').classList.add('hidden')" class="text-on-surface-variant hover:text-primary">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+    <div id="cart-items" class="space-y-3 mb-4 max-h-52 overflow-y-auto"></div>
+    <div class="border-t border-outline-variant/30 pt-4">
+      <div class="flex justify-between font-bold text-primary mb-4">
+        <span>Total</span>
+        <span id="cart-total">$0.00</span>
+      </div>
+      <button onclick="placeOrder()" class="w-full cta-gloss text-on-primary py-3 rounded-lg font-bold active:scale-95 transition-transform">
+        Place Order
+      </button>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-primary w-full pt-16 pb-8 text-surface">
+    <div class="flex flex-col items-center text-center px-6 max-w-7xl mx-auto">
+      <span class="font-headline text-3xl text-secondary-fixed mb-4 block">Roast &amp; Relic</span>
+      <div class="flex flex-wrap justify-center gap-8 mb-12">
+        <a href="#" class="text-surface/70 hover:text-secondary-fixed transition-colors">Instagram</a>
+        <a href="#" class="text-surface/70 hover:text-secondary-fixed transition-colors">Facebook</a>
+        <a href="#" class="text-surface/70 hover:text-secondary-fixed transition-colors">Twitter</a>
+        <a href="#" class="text-surface/70 hover:text-secondary-fixed transition-colors">Privacy Policy</a>
+      </div>
+      <div class="w-full h-px bg-surface/10 mb-8"></div>
+      <p class="text-sm text-surface/50 font-headline">© 2024 Roast &amp; Relic. 123 Artisan Lane, Bean City.</p>
+    </div>
+  </footer>
+</div>
+
+<!-- ══════════════════════════ ABOUT PAGE ══════════════════════════ -->
+<div id="page-about" class="page">
+  <main class="pt-32">
+    <!-- Hero -->
+    <section class="max-w-7xl mx-auto px-8 mb-32 grid grid-cols-1 md:grid-cols-12 gap-12 items-center">
+      <div class="md:col-span-7 z-10">
+        <p class="text-secondary font-cursive text-xl mb-4">Crafting moments, one bean at a time.</p>
+        <h1 class="text-primary font-headline font-black text-6xl md:text-8xl leading-[1.1] tracking-tighter mb-8">
+          Brewing With <br/>
+          <span class="text-on-tertiary-container">Purpose.</span>
+        </h1>
+        <p class="text-on-surface-variant text-lg max-w-lg font-body leading-relaxed">
+          At The Artisanal Editorial, we believe coffee is more than just a morning ritual. It's an exploration of terroir, a commitment to local farmers, and a relentless pursuit of the perfect cup.
+        </p>
+      </div>
+      <div class="md:col-span-5 relative">
+        <div class="aspect-[4/5] bg-surface-container rounded-xl overflow-hidden shadow-xl transform rotate-3">
+          <img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB2ZUka3k1I085SFe4cG_w4BgmKs2X8P8ZVJP3UPgsBuOJ_5L5drszhx5IqjFDMRqXkvZBbllZfH7IDNi7NQOTlyI1fQzdBFFbmOiM4cwXuXd-bHyI2ZMsEB4hQ8goEZF9T0pZqj0dt8-wPtamgpqRJuPk8b7BH6ra952-V7QpqmOQpxN9kujJLznLRF4jvN1AEtQT27L0NMRBhQkPs7WRQnG5oYQ1vUYAiCLUGyn_K3DaJWiidkMuO-ei9tQ1c6KBoosGIE8VjMQV3" alt="Fresh coffee"/>
+        </div>
+        <div class="absolute -bottom-10 -left-10 w-48 h-48 bg-secondary-container/30 backdrop-blur-md rounded-full -z-10"></div>
+      </div>
+    </section>
+
+    <!-- Our Story -->
+    <section class="bg-surface-container-low py-32">
+      <div class="max-w-7xl mx-auto px-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-20 items-center">
+          <div class="order-2 md:order-1 relative">
+            <div class="grid grid-cols-2 gap-4">
+              <img class="rounded-lg shadow-sm w-full h-64 object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDgU-TPU9366w96KiGl1T57cQ1xTPg8gFs308ZRNwjg5qOXYd2872ksJJs5_6Hvt_lkfjWfnCLir6o3pHGUEpzbstBHupe9pGElTAVl2aeNCNxxavccmNky3r8nFH-PtKQA5YiEVX0hfGE_uRQUovE3pU03F7gQLkthRZhZkFyQSRDVJ6jBa7SHYIPh0dZyEbDVsotd7ARhINyiOd1Nzr0VqldaHGjg2GN6se_b4Xt-Po4eYGpzNdFR7qQQdxnyEcq4kyl9fzl7jjVp" alt="Coffee beans"/>
+              <img class="rounded-lg shadow-sm w-full h-64 object-cover mt-12" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCNcn70wvaTU9vK-q9ZM2CBjvdiEQ3Xl-wanqGGL25OytN8O19-EKKgHmLgQ62R8t6JrVomf0NiO4arEUZt3-SJrlV4CJdLfQ9UOL0EYYmv0NHOqTiYOlDbhuZDZrERIuiFduGiKEcFBu1EEVFB8lFXy8hTDfqMawGIxFKAAkPibF0q_tJpEUfjD5hyZS44_In3SQr13N6ONIURDP8CVvfG_PSJCR8iQFb_1sxVzQQoWQV1UV02vQ4TRPk9gwUyG8c0ndBzUO8ySGoW" alt="Barista"/>
+            </div>
+            <div class="absolute -top-4 -right-4 bg-tertiary-fixed text-on-tertiary-fixed px-4 py-2 rounded-sm font-label text-xs uppercase tracking-widest font-bold">
+              Established 2018
+            </div>
+          </div>
+          <div class="order-1 md:order-2">
+            <h2 class="text-primary font-headline font-black text-4xl mb-8 tracking-tight">Our Story</h2>
+            <div class="space-y-6 text-on-surface-variant font-body text-lg leading-relaxed">
+              <p>What started as a modest experiment in a small garage has blossomed into a community hub for coffee enthusiasts. Our journey began with a single vintage roaster and a simple mission: to treat every bean with the respect it deserves.</p>
+              <p>We focus on <span class="text-primary font-bold">small batches</span> to ensure maximum freshness and quality control. Every roast is a dialogue between the roaster and the bean, unlocking hidden notes of stone fruit, dark chocolate, and blooming jasmine.</p>
+              <p>Our beans are <span class="text-primary font-bold">ethically traded</span>, fostering direct relationships with farmers who share our <span class="text-primary font-bold">passion for the perfect cup</span>. We don't just sell coffee; we curate an editorial experience of flavor.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Values -->
+    <section class="py-32 bg-surface">
+      <div class="max-w-7xl mx-auto px-8">
+        <div class="text-center mb-20">
+          <h2 class="text-primary font-headline font-black text-4xl mb-4">The Artisan Way</h2>
+          <p class="text-on-surface-variant font-body">Rooted in tradition, refined for the modern palate.</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="bg-surface-container-lowest p-10 rounded-xl shadow-[0px_20px_40px_rgba(81,68,61,0.06)] flex flex-col items-center text-center">
+            <div class="w-16 h-16 bg-secondary-container rounded-full flex items-center justify-center mb-6">
+              <span class="material-symbols-outlined text-on-secondary-container text-3xl">temp_preferences_custom</span>
+            </div>
+            <h3 class="text-primary font-headline font-bold text-xl mb-4">Precision Roasting</h3>
+            <p class="text-on-surface-variant text-sm">Our roast profiles are meticulously calibrated to highlight the unique terroir of every origin.</p>
+          </div>
+          <div class="bg-surface-container-highest p-10 rounded-xl flex flex-col items-center text-center transform md:-translate-y-4">
+            <div class="w-16 h-16 bg-tertiary-fixed rounded-full flex items-center justify-center mb-6">
+              <span class="material-symbols-outlined text-on-tertiary-fixed text-3xl">eco</span>
+            </div>
+            <h3 class="text-primary font-headline font-bold text-xl mb-4">Direct Sourcing</h3>
+            <p class="text-on-surface-variant text-sm">By working directly with small estate farmers, we ensure transparency and sustainable livings for all.</p>
+          </div>
+          <div class="bg-surface-container-lowest p-10 rounded-xl shadow-[0px_20px_40px_rgba(81,68,61,0.06)] flex flex-col items-center text-center">
+            <div class="w-16 h-16 bg-primary-fixed rounded-full flex items-center justify-center mb-6">
+              <span class="material-symbols-outlined text-on-primary-fixed text-3xl">favorite</span>
+            </div>
+            <h3 class="text-primary font-headline font-bold text-xl mb-4">Community Focused</h3>
+            <p class="text-on-surface-variant text-sm">Our shop is a shared canvas—a place for artists, thinkers, and dreamers to gather over a warm cup.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Roast Spectrum -->
+    <section class="max-w-4xl mx-auto px-8 mb-32">
+      <div class="bg-surface-container rounded-2xl p-12 text-center">
+        <h3 class="text-primary font-headline font-bold text-2xl mb-8">The Roast Spectrum</h3>
+        <div class="relative h-4 w-full bg-outline-variant/30 rounded-full mb-12">
+          <div class="absolute inset-y-0 left-[60%] w-[15%] bg-tertiary-fixed rounded-full flex items-center justify-center">
+            <span class="text-[9px] font-bold text-on-tertiary-fixed uppercase tracking-tighter">Sweet Spot</span>
+          </div>
+          <div class="absolute -top-3 left-[65%] w-8 h-8 bg-primary rounded-full border-4 border-surface shadow-md"></div>
+        </div>
+        <div class="flex justify-between text-xs font-label font-bold text-on-surface-variant uppercase tracking-widest">
+          <span>Light Floral</span>
+          <span>Medium Balanced</span>
+          <span>Deep Earthy</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-surface-container w-full py-12 px-8">
+    <div class="flex flex-col md:flex-row justify-between items-center gap-8 max-w-7xl mx-auto">
+      <div class="font-headline italic text-xl text-primary">The Artisanal Editorial</div>
+      <div class="flex flex-wrap justify-center gap-8 text-sm font-medium">
+        <a href="#" class="text-on-surface-variant hover:text-secondary transition-colors opacity-80 hover:opacity-100">Instagram</a>
+        <a href="#" class="text-on-surface-variant hover:text-secondary transition-colors opacity-80 hover:opacity-100">Facebook</a>
+        <a href="#" class="text-on-surface-variant hover:text-secondary transition-colors opacity-80 hover:opacity-100">Twitter</a>
+        <a href="#" class="text-on-surface-variant hover:text-secondary transition-colors opacity-80 hover:opacity-100">Privacy Policy</a>
+      </div>
+      <p class="text-on-surface-variant text-sm font-medium opacity-80 text-center md:text-right">
+        © 2024 The Artisanal Editorial. Hand-stamped and freshly roasted.
+      </p>
+    </div>
+  </footer>
+</div>
+
+<!-- ══════════════════════════ CONTACT PAGE ══════════════════════════ -->
+<div id="page-contact" class="page">
+  <main class="pt-32 pb-24 px-6 max-w-7xl mx-auto">
+    <header class="mb-16 text-center md:text-left">
+      <span class="text-secondary font-semibold tracking-widest uppercase text-sm mb-4 block">Get in Touch</span>
+      <h1 class="font-headline text-5xl md:text-7xl font-bold text-primary mb-6 leading-tight">Crafting Connections Over Coffee</h1>
+      <p class="text-on-surface-variant max-w-2xl text-lg leading-relaxed">Whether you're looking for the perfect table for your morning ritual or simply wish to share a story, our doors are always open.</p>
+    </header>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+      <!-- Reservation Form -->
+      <div class="lg:col-span-7 bg-surface-container-low p-8 md:p-12 rounded-xl">
+        <h2 class="font-headline text-3xl font-bold text-primary mb-8">Reserve a Table</h2>
+        <div id="reservation-success" class="hidden mb-6 p-4 bg-tertiary-fixed/30 rounded-xl text-center">
+          <span class="material-symbols-outlined text-tertiary text-4xl block mb-2">check_circle</span>
+          <p class="font-bold text-primary">Reservation confirmed! See you soon.</p>
+        </div>
+        <div class="space-y-6" id="reservation-form">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="flex flex-col gap-2">
+              <label class="text-sm font-semibold text-on-surface-variant px-1" for="r-name">Name</label>
+              <input class="bg-surface-variant border-none rounded-lg focus:ring-2 focus:ring-secondary/20 p-4 text-on-surface placeholder:text-outline/50" id="r-name" placeholder="Your name" type="text"/>
+            </div>
+            <div class="flex flex-col gap-2">
+              <label class="text-sm font-semibold text-on-surface-variant px-1" for="r-guests">Number of Guests</label>
+              <input class="bg-surface-variant border-none rounded-lg focus:ring-2 focus:ring-secondary/20 p-4 text-on-surface" id="r-guests" min="1" placeholder="2" type="number"/>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="flex flex-col gap-2">
+              <label class="text-sm font-semibold text-on-surface-variant px-1" for="r-date">Date</label>
+              <input class="bg-surface-variant border-none rounded-lg focus:ring-2 focus:ring-secondary/20 p-4 text-on-surface" id="r-date" type="date"/>
+            </div>
+            <div class="flex flex-col gap-2">
+              <label class="text-sm font-semibold text-on-surface-variant px-1" for="r-time">Time</label>
+              <input class="bg-surface-variant border-none rounded-lg focus:ring-2 focus:ring-secondary/20 p-4 text-on-surface" id="r-time" type="time"/>
+            </div>
+          </div>
+          <div class="pt-4">
+            <button onclick="confirmReservation()" class="w-full md:w-auto bg-tertiary text-on-tertiary px-10 py-4 rounded-lg font-bold text-lg hover:opacity-90 active:scale-95 transition-all shadow-lg shadow-tertiary/10">
+              Confirm Reservation
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contact Info -->
+      <div class="lg:col-span-5 space-y-12">
+        <div class="relative group">
+          <div class="absolute -inset-4 bg-surface-container-high rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          <div class="relative flex gap-6">
+            <div class="bg-secondary-container text-on-secondary-container w-14 h-14 rounded-lg flex items-center justify-center shrink-0">
+              <span class="material-symbols-outlined text-3xl">location_on</span>
+            </div>
+            <div>
+              <h3 class="font-headline text-xl font-bold text-primary mb-2">Our Sanctuary</h3>
+              <p class="text-on-surface-variant leading-relaxed">
+                123 Artisan Lane,<br/>
+                Bean City, BC 4502
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="relative group">
+          <div class="absolute -inset-4 bg-surface-container-high rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          <div class="relative flex gap-6">
+            <div class="bg-tertiary-container text-on-tertiary-container w-14 h-14 rounded-lg flex items-center justify-center shrink-0">
+              <span class="material-symbols-outlined text-3xl">schedule</span>
+            </div>
+            <div>
+              <h3 class="font-headline text-xl font-bold text-primary mb-2">Brewing Hours</h3>
+              <ul class="text-on-surface-variant space-y-1">
+                <li class="flex justify-between gap-8"><span>Mon — Fri</span><span class="font-medium text-primary">07:00 – 20:00</span></li>
+                <li class="flex justify-between gap-8"><span>Sat — Sun</span><span class="font-medium text-primary">08:00 – 18:00</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="relative group">
+          <div class="absolute -inset-4 bg-surface-container-high rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          <div class="relative flex gap-6">
+            <div class="bg-primary-fixed text-on-primary-fixed w-14 h-14 rounded-lg flex items-center justify-center shrink-0">
+              <span class="material-symbols-outlined text-3xl">mail</span>
+            </div>
+            <div>
+              <h3 class="font-headline text-xl font-bold text-primary mb-2">Write to Us</h3>
+              <p class="text-on-surface-variant">hello@roastandrelic.com</p>
+              <p class="text-on-surface-variant">+1 (555) 012-3456</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Map placeholder -->
+        <div class="rounded-2xl overflow-hidden bg-surface-container h-64 shadow-sm relative">
+          <img class="w-full h-full object-cover grayscale opacity-40 mix-blend-multiply" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAnWhid23FeTmcH6KC3ExF8qwCWmxqQouPfISy69zk8qRkloba-SH_wv0I49nXfQzA0-ijPM91Oytd555r4KzRuIZL41R9af8oe2Qz4GN6Nl-bW1_3mNYKaTsGLqqLyjwCg_AP5Wfxks788UiRJv00i8EIKkZvgwnM5rd24d0miNz4_8OhyWgNc_rOihEGtCgRPGsIXA_z8rInjSb__GyvBe6NEux1URuogcNS9YS4lBtH7uWR_kFfYKu9_EnxAVnN8f5OuUkzXsIzB" alt="Map"/>
+          <div class="absolute inset-0 flex items-center justify-center">
+            <div class="bg-surface px-6 py-4 rounded-xl shadow-xl flex items-center gap-3">
+              <span class="material-symbols-outlined text-secondary">explore</span>
+              <span class="font-bold text-primary tracking-tight">Bean City</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-primary w-full pt-16 pb-8">
+    <div class="flex flex-col items-center text-center px-6 max-w-7xl mx-auto">
+      <span class="font-headline text-3xl text-secondary-fixed mb-4 block">Roast &amp; Relic</span>
+      <div class="flex flex-wrap justify-center gap-8 mb-12">
+        <a href="#" class="text-surface/80 hover:text-secondary-fixed transition-colors font-headline">Instagram</a>
+        <a href="#" class="text-surface/80 hover:text-secondary-fixed transition-colors font-headline">Facebook</a>
+        <a href="#" class="text-surface/80 hover:text-secondary-fixed transition-colors font-headline">Twitter</a>
+        <a href="#" class="text-surface/80 hover:text-secondary-fixed transition-colors font-headline">Privacy Policy</a>
+      </div>
+      <div class="w-full h-px bg-surface/10 mb-8"></div>
+      <p class="text-surface/50 font-headline text-sm">© 2024 Roast &amp; Relic. 123 Artisan Lane, Bean City.</p>
+    </div>
+  </footer>
+</div>
+
+<!-- ══════════════════════════ TOAST ══════════════════════════ -->
+<div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-[100] opacity-0 pointer-events-none">
+  <div id="toast-inner" class="bg-inverse-surface text-inverse-on-surface px-6 py-3 rounded-full font-bold text-sm shadow-xl flex items-center gap-2">
+    <span class="material-symbols-outlined text-tertiary-fixed text-base">check_circle</span>
+    <span id="toast-msg">Done!</span>
+  </div>
+</div>
+
+<script>
+  // ── Cart state ──
+  let cart = [];
+  let cartOpen = false;
+
+  function showPage(page) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-' + page).classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    // Update nav active state
+    document.querySelectorAll('.nav-link').forEach(a => {
+      a.classList.remove('nav-active');
+      if (a.dataset.nav === page) a.classList.add('nav-active');
+    });
+
+    // Hide cart panel when navigating
+    document.getElementById('cart-panel').classList.add('hidden');
+  }
+
+  function toggleMobile() {
+    const m = document.getElementById('mobile-menu');
+    m.classList.toggle('open');
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    document.getElementById('toast-msg').textContent = msg;
+    t.style.opacity = '1';
+    t.style.pointerEvents = 'auto';
+    setTimeout(() => { t.style.opacity = '0'; t.style.pointerEvents = 'none'; }, 2500);
+  }
+
+  function addToCart(name, price) {
+    const existing = cart.find(i => i.name === name);
+    if (existing) {
+      existing.qty++;
+    } else {
+      cart.push({ name, price, qty: 1 });
+    }
+    renderCart();
+    document.getElementById('cart-panel').classList.remove('hidden');
+    showToast(name + ' added to order!');
+  }
+
+  function renderCart() {
+    const container = document.getElementById('cart-items');
+    if (cart.length === 0) {
+      container.innerHTML = '<p class="text-on-surface-variant text-sm text-center py-2">Your order is empty.</p>';
+      document.getElementById('cart-total').textContent = '$0.00';
+      return;
+    }
+    container.innerHTML = cart.map((item, i) => `
+      <div class="flex justify-between items-center gap-2">
+        <div class="flex items-center gap-2 flex-1 min-w-0">
+          <button onclick="changeQty(${i},-1)" class="w-6 h-6 rounded-full bg-surface-container text-primary font-bold text-sm flex items-center justify-center hover:bg-surface-container-high transition">−</button>
+          <span class="text-xs font-bold text-on-surface-variant w-5 text-center">${item.qty}</span>
+          <button onclick="changeQty(${i},1)" class="w-6 h-6 rounded-full bg-surface-container text-primary font-bold text-sm flex items-center justify-center hover:bg-surface-container-high transition">+</button>
+          <span class="text-sm text-on-surface truncate">${item.name}</span>
+        </div>
+        <span class="text-sm font-bold text-secondary shrink-0">${(parseFloat(item.price.replace('$','')) * item.qty).toFixed(2)}</span>
+      </div>
+    `).join('');
+    const total = cart.reduce((sum, item) => sum + parseFloat(item.price.replace('$','')) * item.qty, 0);
+    document.getElementById('cart-total').textContent = '$' + total.toFixed(2);
+  }
+
+  function changeQty(i, delta) {
+    cart[i].qty += delta;
+    if (cart[i].qty <= 0) cart.splice(i, 1);
+    renderCart();
+  }
+
+  function placeOrder() {
+    cart = [];
+    renderCart();
+    document.getElementById('cart-panel').classList.add('hidden');
+    showToast('Order placed! See you soon ☕');
+  }
+
+  function confirmReservation() {
+    const name = document.getElementById('r-name').value.trim();
+    const date = document.getElementById('r-date').value;
+    const time = document.getElementById('r-time').value;
+    if (!name || !date || !time) {
+      showToast('Please fill in all required fields.');
+      return;
+    }
+    document.getElementById('reservation-form').classList.add('hidden');
+    document.getElementById('reservation-success').classList.remove('hidden');
+    showToast('Reservation confirmed for ' + name + '!');
+  }
+
+  function subscribeNewsletter() {
+    const email = document.getElementById('newsletter-email').value.trim();
+    if (!email || !email.includes('@')) {
+      showToast('Please enter a valid email.');
+      return;
+    }
+    document.getElementById('newsletter-email').value = '';
+    showToast('Welcome to The Morning Journal! ☕');
+  }
+
+  // Init
+  showPage('home');
+  renderCart();
+</script>
+</body>
+</html>
